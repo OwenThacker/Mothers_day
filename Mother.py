@@ -3,6 +3,7 @@ import os
 import time
 from PIL import Image, ImageFile
 import random
+import base64
 
 # Allow truncated images to load
 ImageFile.LOAD_TRUNCATED_IMAGES = True
@@ -159,7 +160,16 @@ st.markdown('<p style="text-align: center; color: #FF1493;">Click play to hear m
 # Check if the personal recorded message exists
 audio_file = "owen_mothers_day_message.mp3"
 if os.path.exists(audio_file):
-    st.audio(audio_file, format="audio/mp3")
+    # Create a more mobile-friendly audio element
+    st.markdown(
+        f"""
+        <audio controls style="width: 100%;">
+            <source src="data:audio/mp3;base64,{base64.b64encode(open(audio_file, 'rb').read()).decode()}" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        """,
+        unsafe_allow_html=True
+    )
 else:
     st.error(f"Audio file '{audio_file}' not found. Please ensure it's in the same directory as this script.")
 
